@@ -33,7 +33,6 @@ model TestCase {
   title         String
   description   String?
   preconditions String?
-  expectedResult String?
   passCriteria  String?
   status        String     @default("Draft")
 

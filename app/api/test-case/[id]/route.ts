@@ -3,85 +3,85 @@ import { prisma } from "@/src/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
-// Zod schema for Requirement Object
-const patchRequirementSchema = z.object({
+// Zod schema for Test Case Data
+const patchTestCaseSchema = z.object({
     title: z.string().optional(),
     description: z.string().optional(),
-    priority: z.enum(["Low", "Medium", "High"]).optional(),
+    preconditions: z.string().optional(),
+    passCriteria: z.string().optional(),
     status: z.enum(["Draft", "In Progress", "Complete"]).optional()
 });
 
-// Gets one requirement by id
+// Gets one test case by id
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
-
-        const requirement = await prisma.requirement.findUnique({
+        const testCase = await prisma.testCase.findUnique({
             where: {
                 id: Number(id)
             }
         });
 
-        if(!requirement) {
-                return NextResponse.json(
-                { error: "Requirement not found" },
+        if (!testCase) {
+            return NextResponse.json(
+                { error: "Test case not found" },
                 { status: 404 }
             );
         }
 
-        return NextResponse.json(requirement, { status: 200});
+        return NextResponse.json(testCase, { status: 200 });
     } catch (error) {
         console.error(error);
         
         return NextResponse.json(
-            { error: "Failed to fetch requirement" },
+            { error: "Failed to fetch test case" },
             { status: 500 }
         );
     }
 }
 
-// Deletes a requirement by id
+// Deletes a test case by id
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
-        const requirement = await prisma.requirement.delete({
+        const testCase = await prisma.testCase.delete({
             where: {
                 id: Number(id)
             }
         });
 
-        return NextResponse.json(requirement, { status: 200});
+        return NextResponse.json(testCase, { status: 200 });
     } catch (error) {
         console.error(error);
 
-        // If requirement with given id does not exist
+        // If test case with given id does not exist
         if (
             error instanceof Prisma.PrismaClientKnownRequestError &&
             error.code === "P2025"
         ) {
             return NextResponse.json(
-                { error: "Requirement not found" },
+                { error: "Test case not found" },
                 { status: 404 }
             );
         }
         
         return NextResponse.json(
-            { error: "Failed to delete requirement" },
+            { error: "Failed to delete test case" },
             { status: 500 }
         );
     }
 }
 
-// Update a Requirement
+// Update a Test Case
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
         const body = await request.json();
 
-        const result = patchRequirementSchema.safeParse(body);
+        const result = patchTestCaseSchema.safeParse(body);
 
         // Zod validation 
         if (!result.success) {
@@ -94,32 +94,32 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
             });
         }
 
-        const requirementData = result.data
+        const testCaseData = result.data
 
-        const requirement = await prisma.requirement.update({
-            data: requirementData,
+        const testCase = await prisma.testCase.update({
+            data: testCaseData,
             where: {
                 id: Number(id)
             }
         });
 
-        return NextResponse.json(requirement, { status: 200});
+        return NextResponse.json(testCase, { status: 200});
     } catch (error) {
         console.error(error);
 
-        // If requirement with given id does not exist
+        // If test case with given id does not exist
         if (
             error instanceof Prisma.PrismaClientKnownRequestError &&
             error.code === "P2025"
         ) {
             return NextResponse.json(
-                { error: "Requirement not found" },
+                { error: "Test case not found" },
                 { status: 404 }
             );
         }
         
         return NextResponse.json(
-            { error: "Failed to update requirement" },
+            { error: "Failed to update test case" },
             { status: 500 }
         );
     }
