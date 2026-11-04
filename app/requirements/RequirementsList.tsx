@@ -9,6 +9,7 @@ export default function RequirementsList() {
     const [requirements, setRequirements] = useState<Requirement[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [deletingId, setDeletingId] = useState<number | null>(null);
 
     useEffect(() => {
         async function fetchRequirements() {
@@ -32,6 +33,41 @@ export default function RequirementsList() {
 
         fetchRequirements();
     }, []);
+
+    async function handleDeleteClick(req: Requirement) {
+        const confirmed = window.confirm(
+            `Are you sure you want to delete ${req.requirementId}?`
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        // Prevents multiple deletion requests for the same requirement
+        setDeletingId(req.id);
+
+        try {
+            const response = await fetch(`/api/requirements/${req.id}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to delete requirement.");
+            }
+
+            // Update requirements state
+            setRequirements((currentRequirements) =>
+                currentRequirements.filter(
+                    (requirement) => requirement.id !== req.id
+                )
+            );
+        } catch {
+            alert("Unable to delete requirement. Please try again.");
+        } finally {
+            // enables the delete button
+            setDeletingId(null);
+        }
+    }
 
     // Still waiting to fetch data
     if (isLoading) {
@@ -72,8 +108,9 @@ export default function RequirementsList() {
                         </p>
                     </div>
                     <button 
-                        className="shrink-0 p-1 border rounded-lg text-muted hover-text-danger" 
+                        className="shrink-0 p-1 border rounded-lg text-muted hover-text-danger disabled:cursor-not-allowed disabled:opacity-50" 
                         aria-label="Delete requirement {req.requirementId}"
+                        disabled={deletingId === req.id}
                         onClick={() => handleDeleteClick(req)}>
                             <Trash2 size={18} />
                     </button>
@@ -82,46 +119,17 @@ export default function RequirementsList() {
             ))}
         </ul>
     )
-
-    async function handleDeleteClick(req: Requirement) {
-        const confirmed = window.confirm(
-            `Are you sure you want to delete ${req.requirementId}?`
-        );
-
-        if (!confirmed) {
-            return;
-        }
-
-        try {
-            const response = await fetch(`/api/requirements/${req.id}`, {
-                method: "DELETE",
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to delete requirement.");
-            }
-
-            // Update requirements state
-            setRequirements((currentRequirements) =>
-                currentRequirements.filter(
-                    (requirement) => requirement.id !== req.id
-                )
-            );
-        } catch {
-            alert("Unable to delete requirement. Please try again.");
-        }
-    }
 }
 
 function getPriorityClasses(priority: string | null) {
-    switch (priority) {
-        case "High":
-            return "border bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-        case "Medium":
-            return "border bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300";
-        case "Low":
-            return "border bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300";
-        default:
-            return "border bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
+        switch (priority) {
+            case "High":
+                return "border bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+            case "Medium":
+                return "border bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300";
+            case "Low":
+                return "border bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300";
+            default:
+                return "border bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
+        }
     }
-}

@@ -39,3 +39,8 @@ body {
 .hover-text-danger {
   @apply hover:text-red-600 hover:dark:text-red-300;
 }
+
+/* Resuable primary button class */
+.button-primary {
+  @apply bg-blue-600 font-medium text-white hover:bg-blue-700 dark:bg-blue-800 dark:hover:bg-blue-700;
+}

@@ -26,7 +26,7 @@ export default function HomePage() {
 
                     <Link
                         href="/requirements"
-                        className="inline-block rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 dark:bg-blue-800 dark:hover:bg-blue-700"
+                        className="inline-block rounded-md button-primary px-4 py-2"
                     >
                         View Requirements
                     </Link>
@@ -43,7 +43,7 @@ export default function HomePage() {
 
                     <Link
                         href="/test-cases"
-                        className="inline-block rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 dark:bg-blue-800 dark:hover:bg-blue-700"
+                        className="inline-block rounded-md button-primary px-4 py-2"
                     >
                         View Test Cases
                     </Link>
