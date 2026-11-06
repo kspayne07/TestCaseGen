@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type SubmitEvent } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function CreateRequirementForm() {
@@ -10,8 +11,14 @@ export default function CreateRequirementForm() {
     const [description, setDescription] = useState("");
     const [priority, setPriority] = useState("Medium");
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const router = useRouter();
+
     return (
-        <form className="mt-8 max-w-2xl space-y-6">
+        <form className="mt-8 max-w-2xl space-y-6" onSubmit={submitCreateRequirement}>
             {/* Requirement Title */}
             <div>
                 <label
@@ -28,6 +35,7 @@ export default function CreateRequirementForm() {
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Enter requirement title..."
                     className="w-full rounded-md border border-stone-300 bg-white px-3 py-2 dark:border-stone-700 dark:bg-stone-900"
+                    required
                 />
             </div>
 
@@ -47,6 +55,7 @@ export default function CreateRequirementForm() {
                     placeholder="Describe the requirement..."
                     rows={5}
                     className="w-full rounded-md border border-stone-300 bg-white px-3 py-2 dark:border-stone-700 dark:bg-stone-900"
+                    required
                 />
             </div>
 
@@ -71,6 +80,13 @@ export default function CreateRequirementForm() {
                 </select>
             </div>
 
+            {/* Error Section */}
+            {error && (
+                <p className="text-sm text-red-600">
+                    {error}
+                </p>
+            )}
+
              {/* Button Section */}
             <div className="flex justify-end gap-3">
                 <Link
@@ -83,10 +99,46 @@ export default function CreateRequirementForm() {
                 <button
                     type="submit"
                     className="button-primary rounded-md px-4 py-2"
+                    disabled={isSubmitting}
                 >
-                    Create Requirement
+                    {isSubmitting ? "Creating..." : "Create Requirement"}
                 </button>
             </div>
         </form>
     );
+
+    async function submitCreateRequirement(e: SubmitEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        setIsSubmitting(true);
+        setError(null);
+
+        try {
+            // Fetch statement
+            const response = await fetch("/api/requirements", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    title,
+                    description,
+                    priority,
+                }),
+            });
+
+            // Check response.ok
+            if (!response.ok) {
+                throw new Error("Failed to fetch requirements.");
+            }
+
+            // Navigate back after successful creation
+            router.push("/requirements");
+        } catch {
+            // Set an appropriate error message
+            setError("Failed to create requirement.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
 }

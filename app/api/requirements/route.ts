@@ -4,10 +4,9 @@ import { z } from "zod";
 
 // Zod schema for Requirement Object
 const requirementSchema = z.object({
-    requirementId: z.string(),
-    title: z.string(),
-    description: z.string(),
-    priority: z.enum(["Low", "Medium", "High"]).nullable(),
+    title: z.string().trim().min(1, "Title is required"),
+    description: z.string().trim().min(1, "Description is required"),
+    priority: z.enum(["Low", "Medium", "High"]),
 });
 
 
@@ -31,8 +30,19 @@ export async function POST(request: Request) {
 
         const requirementData = result.data
 
+        /* Requests squence variable value from prisma */
+        const sequenceResult = await prisma.$queryRaw<{ nextval: bigint }[]>`
+            SELECT nextval('requirement_id_seq')
+        `;
+
+        const requirementId = `REQ-${sequenceResult[0].nextval.toString().padStart(3, "0")}`;
+
         const requirement = await prisma.requirement.create({
-            data: requirementData,
+            data: { 
+                ...requirementData,
+                requirementId,
+            }
+
         });
 
         return NextResponse.json(requirement, { status: 201});

@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 
 import type { Requirement } from "./types/requirement";
 import { Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
+
+import Link from "next/link";
 
 export default function RequirementsList() {
     const [requirements, setRequirements] = useState<Requirement[]>([]);
@@ -107,6 +110,12 @@ export default function RequirementsList() {
                             {req.description}
                         </p>
                     </div>
+                    <Link
+                        href={`/requirements/${req.id}/edit`}
+                        className="shrink-0 p-1 border rounded-lg text-muted hover-text-primary" 
+                        aria-label={`Edit requirement ${req.requirementId}`}>
+                            <Pencil size={16} />
+                    </Link>
                     <button 
                         className="shrink-0 p-1 border rounded-lg text-muted hover-text-danger disabled:cursor-not-allowed disabled:opacity-50" 
                         aria-label="Delete requirement {req.requirementId}"

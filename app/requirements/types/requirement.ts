@@ -3,5 +3,5 @@ export type Requirement = {
     requirementId: string;
     title: string;
     description: string;
-    priority: string | null;
+    priority: string;
 };
