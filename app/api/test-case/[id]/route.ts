@@ -20,6 +20,18 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         const testCase = await prisma.testCase.findUnique({
             where: {
                 id: Number(id)
+            },
+            include: {
+                steps: {
+                    orderBy: {
+                        stepNumber: "asc",
+                    },
+                },
+                requirements: {
+                    include: {
+                        requirement: true,
+                    }
+                }
             }
         });
 

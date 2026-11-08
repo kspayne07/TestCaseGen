@@ -7,7 +7,7 @@ import { z } from "zod";
 const testStepSchema = z.object({
     testCaseId: z.int(),
     stepNumber: z.int(),
-    instruction: z.string(),
+    instruction: z.string().trim().min(1),
     expectedResult: z.string().optional()
 });
 

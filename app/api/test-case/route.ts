@@ -8,7 +8,8 @@ const testCaseSchema = z.object({
     title: z.string(),
     description: z.string().optional(),
     preconditions: z.string().optional(),
-    passCriteria: z.string().optional()
+    passCriteria: z.string().optional(),
+    requirementIds: z.array(z.number())
 });
 
 // Create a new Test Case
@@ -50,7 +51,15 @@ export async function POST(request: Request) {
 // Gets all Test Cases
 export async function GET(request: Request) {
     try {
-        const testCases = await prisma.testCase.findMany();
+        const testCases = await prisma.testCase.findMany({
+            include: {
+                requirements: {
+                    include: {
+                        requirement: true,
+                    }
+                }
+            }
+        });
 
         return NextResponse.json(testCases, { status: 200});
     } catch (error) {

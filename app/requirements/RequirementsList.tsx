@@ -118,7 +118,7 @@ export default function RequirementsList() {
                     </Link>
                     <button 
                         className="shrink-0 p-1 border rounded-lg text-muted hover-text-danger disabled:cursor-not-allowed disabled:opacity-50" 
-                        aria-label="Delete requirement {req.requirementId}"
+                        aria-label={`Delete requirement ${req.requirementId}`}
                         disabled={deletingId === req.id}
                         onClick={() => handleDeleteClick(req)}>
                             <Trash2 size={18} />
