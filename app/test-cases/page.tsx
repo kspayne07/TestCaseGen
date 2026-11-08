@@ -16,7 +16,7 @@ export default function Page() {
                             Create, edit and manage all of your test cases.
                         </p>
                         <Link
-                            href="/requirements/create"
+                            href="/test-cases/create"
                             className="inline-flex items-center gap-2 button-primary rounded-md px-4 py-2"
                         >
                             <Plus size={18} />

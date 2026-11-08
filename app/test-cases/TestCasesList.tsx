@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 
 import type { TestCase } from "./types/testCase";
-import { Trash2 } from "lucide-react";
-import { Pencil } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 
 import Link from "next/link";
 
@@ -17,7 +16,7 @@ export default function TestCasesList() {
     useEffect(() => {
         async function fetchTestCases() {
             try {
-                const response = await fetch("/api/test-case");
+                const response = await fetch("/api/test-cases");
 
                 if (!response.ok) {
                     throw new Error("Failed to fetch test cases.");
@@ -50,12 +49,12 @@ export default function TestCasesList() {
         setDeletingId(tc.id);
 
         try {
-            const response = await fetch(`/api/requirements/${tc.id}`, {
+            const response = await fetch(`/api/test-cases/${tc.id}`, {
                 method: "DELETE",
             });
 
             if (!response.ok) {
-                throw new Error("Failed to delete requirement.");
+                throw new Error("Failed to delete test case.");
             }
 
             // Update requirements state
@@ -95,12 +94,16 @@ export default function TestCasesList() {
                     className="border-b border-stone-200 dark:border-stone-700 last:border-b-0"
                 >
                 <div className="flex items-start justify-between gap-2 p-4">
-                    {/* Test Case title and description */}
+                    {/* Test Case title, status and description */}
                     <div className="min-w-0 flex-1">
                         <div className="mb-2 flex flex-wrap items-center gap-2">
                             <h2 className="text-base font-semibold">
                                 {tc.testCaseId} -- {tc.title}
                             </h2>
+                            <span className={`rounded-full px-3 text-sm ${getStatusClasses(tc.status)}`}
+                            >
+                                {req.priority ?? "Unassigned"}
+                            </span>
                         </div>
                         <p className="max-w-2xl text-sm text-muted">
                             {tc.description}
