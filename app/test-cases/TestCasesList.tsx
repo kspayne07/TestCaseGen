@@ -102,7 +102,7 @@ export default function TestCasesList() {
                             </h2>
                             <span className={`rounded-full px-3 text-sm ${getStatusClasses(tc.status)}`}
                             >
-                                {req.priority ?? "Unassigned"}
+                                {tc.status ?? "Unassigned"}
                             </span>
                         </div>
                         <p className="max-w-2xl text-sm text-muted">
@@ -129,4 +129,15 @@ export default function TestCasesList() {
     )
 }
 
-
+function getStatusClasses(priority: string | null) {
+    switch (priority) {
+        case "Draft":
+            return "border bg-stone-100 text-stone-800 dark:bg-stone-600 dark:text-stone-200";
+        case "Ready":
+            return "border bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200";
+        case "Retired":
+            return "border bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200";
+        default:
+            return "border bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
+    }
+}

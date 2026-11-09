@@ -131,14 +131,14 @@ export default function RequirementsList() {
 }
 
 function getPriorityClasses(priority: string | null) {
-        switch (priority) {
-            case "High":
-                return "border bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-            case "Medium":
-                return "border bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300";
-            case "Low":
-                return "border bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300";
-            default:
-                return "border bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
-        }
+    switch (priority) {
+        case "High":
+            return "border bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+        case "Medium":
+            return "border bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300";
+        case "Low":
+            return "border bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300";
+        default:
+            return "border bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
     }
+}

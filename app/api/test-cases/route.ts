@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 import { z } from "zod";
 
+
 // Zod schema for Test Case Data
 const testCaseSchema = z.object({
-    testCaseId: z.string(),
-    title: z.string(),
-    description: z.string().optional(),
+    title: z.string().trim().min(1),
+    description: z.string().trim().min(1, "Description is required"),
     preconditions: z.string().optional(),
     passCriteria: z.string().optional(),
-    requirementIds: z.array(z.number())
+    requirementIds: z.array(z.number().int().positive())
 });
 
 // Create a new Test Case
@@ -32,8 +32,59 @@ export async function POST(request: Request) {
 
         const testCaseData = result.data;
 
+        // Check that all selected Requirements exist
+        const existingRequirements = await prisma.requirement.findMany({
+            where: {
+                id: {
+                    in: testCaseData.requirementIds,
+                },
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        // Find IDs that weren't returned by the database
+        const existingIds = new Set(
+            existingRequirements.map((requirement) => requirement.id)
+        );
+
+        const invalidIds = testCaseData.requirementIds.filter(
+            (id) => !existingIds.has(id)
+        );
+
+        // Return an error if any Requirement IDs are invalid
+        if (invalidIds.length > 0) {
+            return NextResponse.json(
+                {
+                    error: "One or more Requirements could not be found.",
+                    invalidRequirementIds: invalidIds,
+                },
+                { status: 400 }
+            );
+        }
+
+        /* Requests squence variable value from prisma */
+        const sequenceResult = await prisma.$queryRaw<{ nextval: bigint }[]>`
+            SELECT nextval('test_case_id_seq')
+        `;
+
+        const testCaseId = `TC-${sequenceResult[0].nextval.toString().padStart(3, "0")}`;
+
+        const { requirementIds, ...testCaseFields } = testCaseData;
+
         const testCase = await prisma.testCase.create({
-            data: testCaseData,
+            data: {
+                testCaseId,
+                ...testCaseFields,
+                requirements: {
+                    create: requirementIds.map((requirementId) => ({
+                        requirement: {
+                            connect: { id: requirementId },
+                        },
+                    })),
+                },
+            },
         });
 
         return NextResponse.json(testCase, { status: 201});
