@@ -139,7 +139,7 @@ export default function EditRequirementForm({
                 throw new Error(`Failed to update requirement ${requirement.requirementId}.`);
             }
 
-            // Navigate back after successful update
+        // Navigate back after successful update
             router.push("/requirements");
         } catch {
             // Set an appropriate error message

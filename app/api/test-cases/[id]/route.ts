@@ -9,7 +9,8 @@ const patchTestCaseSchema = z.object({
     description: z.string().optional(),
     preconditions: z.string().optional(),
     passCriteria: z.string().optional(),
-    status: z.enum(["Draft", "In Progress", "Complete"]).optional()
+    status: z.enum(["Draft", "In Progress", "Complete"]).optional(),
+    requirementIds: z.array(z.number().int().positive()).optional(),
 });
 
 // Gets one test case by id
@@ -91,6 +92,16 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     try {
         const { id } = await params;
 
+        // Check that the id is a number
+        const testCaseId = Number(id);
+
+        if (!Number.isInteger(testCaseId) || testCaseId <= 0) {
+            return NextResponse.json(
+                { error: "Invalid Test Case ID" },
+                { status: 400 }
+            );
+        }
+
         const body = await request.json();
 
         const result = patchTestCaseSchema.safeParse(body);
@@ -108,11 +119,69 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
         const testCaseData = result.data
 
-        const testCase = await prisma.testCase.update({
-            data: testCaseData,
-            where: {
-                id: Number(id)
+        // Only validate Requirement IDs if they were provided
+        if (testCaseData.requirementIds !== undefined) {
+
+            // Check that all selected Requirements exist
+            const existingRequirements = await prisma.requirement.findMany({
+                where: {
+                    id: {
+                        in: testCaseData.requirementIds,
+                    },
+                },
+                select: {
+                    id: true,
+                },
+            });
+
+            // Find IDs that weren't returned by the database
+            const existingIds = new Set(
+                existingRequirements.map((requirement) => requirement.id)
+            );
+
+            const invalidIds = testCaseData.requirementIds.filter(
+                (id) => !existingIds.has(id)
+            );
+
+            // Return an error if any Requirement IDs are invalid
+            if (invalidIds.length > 0) {
+                return NextResponse.json(
+                    {
+                        error: "One or more Requirements could not be found.",
+                        invalidRequirementIds: invalidIds,
+                    },
+                    { status: 400 }
+                );
             }
+        }
+
+        const { requirementIds, ...testCaseFields } = testCaseData;
+
+        const testCase = await prisma.testCase.update({
+            data: {
+                ...testCaseFields,
+
+                ...(requirementIds !== undefined && {
+                    requirements: {
+                        deleteMany: {},
+                        create: requirementIds.map((requirementId) => ({
+                            requirement: {
+                                connect: { id: requirementId },
+                            },
+                        })),
+                    },
+                }),
+            },
+            where: {
+                id: Number(id),
+            },
+            include: {
+                requirements: {
+                    include: {
+                        requirement: true,
+                    },
+                },
+            },
         });
 
         return NextResponse.json(testCase, { status: 200});

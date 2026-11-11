@@ -17,7 +17,7 @@ export default function CreateTestCaseForm() {
     const [requirementIds, setRequirementIds] = useState<number[]>([]);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    setIsLoading(false);
     const [error, setError] = useState<string | null>(null);
 
     const router = useRouter();
@@ -47,7 +47,7 @@ export default function CreateTestCaseForm() {
 
     return (
         <form className="mt-8 max-w-2xl space-y-6" onSubmit={submitCreateTestCase}>
-            {/* Test Case Title */}
+            {/* Title */}
             <div>
                 <label
                     htmlFor="title"
@@ -98,7 +98,7 @@ export default function CreateTestCaseForm() {
 
                 <textarea
                     id="preconditions"
-                    value={description}
+                    value={preconditions}
                     onChange={(e) => setPreconditions(e.target.value)}
                     placeholder="List the test case's preconditions..."
                     rows={5}
@@ -199,7 +199,7 @@ export default function CreateTestCaseForm() {
                     className="button-primary rounded-md px-4 py-2"
                     disabled={isSubmitting}
                 >
-                    {isSubmitting ? "Creating..." : "Create Requirement"}
+                    {isSubmitting ? "Creating..." : "Create Test Case"}
                 </button>
             </div>
         </form>
@@ -231,13 +231,13 @@ export default function CreateTestCaseForm() {
                     description,
                     preconditions,
                     passCriteria,
-                    requirements
+                    requirementIds
                 }),
             });
 
             // Check response.ok
             if (!response.ok) {
-                throw new Error("Failed to fetch test casess.");
+                throw new Error("Failed to fetch test cases.");
             }
 
             // Navigate back after successful creation

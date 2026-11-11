@@ -6,6 +6,7 @@ export type TestCase = {
     preconditions: string | null;
     passCriteria: string | null;
     status: string;
+    
     requirements: {
         requirement: {
             id: number;

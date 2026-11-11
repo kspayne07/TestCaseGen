@@ -87,45 +87,81 @@ export default function TestCasesList() {
     }
 
     return (
-        <ul className="bg-white p-2 border border-stone-200 rounded-lg dark:border-stone-700 dark:bg-stone-900">
-            {testCases.map((tc) => (
-                <li 
-                    key={tc.id}
-                    className="border-b border-stone-200 dark:border-stone-700 last:border-b-0"
-                >
-                <div className="flex items-start justify-between gap-2 p-4">
-                    {/* Test Case title, status and description */}
-                    <div className="min-w-0 flex-1">
-                        <div className="mb-2 flex flex-wrap items-center gap-2">
-                            <h2 className="text-base font-semibold">
-                                {tc.testCaseId} -- {tc.title}
-                            </h2>
-                            <span className={`rounded-full px-3 text-sm ${getStatusClasses(tc.status)}`}
-                            >
-                                {tc.status ?? "Unassigned"}
-                            </span>
+        <div className="max-h-[600px] overflow-y-auto rounded-lg border border-stone-200 dark:border-stone-700">
+            <ul className="bg-white p-2 dark:bg-stone-900">
+                {testCases.map((tc) => (
+                    <li 
+                        key={tc.id}
+                        className="border-b border-stone-200 dark:border-stone-700 last:border-b-0"
+                    >
+                    <div className="flex items-start justify-between gap-2 p-4">
+                        <div className="min-w-0 flex-1">
+                            <div className="mb-2 flex flex-wrap items-center gap-2">
+                                {/* Test Case title*/}
+                                <h2 className="text-base font-semibold">
+                                    {tc.testCaseId} -- {tc.title}
+                                </h2>
+
+                                {/* Test Case status*/}
+                                <span className={`rounded-full px-3 text-sm ${getStatusClasses(tc.status)}`}
+                                >
+                                    {tc.status ?? "Unassigned"}
+                                </span>
+                            </div>
+                            {/* Test Case description*/}
+                            <p className="max-w-2xl text-sm text-muted">
+                                {tc.description}
+                            </p>
+
+                            {/* Associated Requirements */}
+                            <div className="mt-3 space-y-2">
+
+                                <p className="text-xs font-medium text-stone-500 dark:text-stone-400">
+                                    ASSOCIATED REQUIREMENTS
+                                </p>
+
+                                {tc.requirements.length === 0 ? (
+                                    <p className="text-sm text-stone-500 dark:text-stone-400">
+                                        No associated Requirements.
+                                    </p>
+                                ) : (
+                                    <div className="flex flex-wrap gap-2">
+                                        {tc.requirements.map((association) => (
+                                            <span
+                                                key={association.requirement.id}
+                                                className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-950 dark:text-blue-300"
+                                            >
+                                                {association.requirement.requirementId}
+                                                {" — "}
+                                                {association.requirement.title}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                        <p className="max-w-2xl text-sm text-muted">
-                            {tc.description}
-                        </p>
+                        
+                        {/* Edit button*/}
+                        <Link
+                            href={`/test-cases/${tc.id}/edit`}
+                            className="shrink-0 p-1 border rounded-lg text-muted hover-text-primary" 
+                            aria-label={`Edit test case ${tc.testCaseId}`}>
+                                <Pencil size={16} />
+                        </Link>
+                        
+                        {/* Delete button*/}
+                        <button 
+                            className="shrink-0 p-1 border rounded-lg text-muted hover-text-danger disabled:cursor-not-allowed disabled:opacity-50" 
+                            aria-label={`Delete test case ${tc.testCaseId}`}
+                            disabled={deletingId === tc.id}
+                            onClick={() => handleDeleteClick(tc)}>
+                                <Trash2 size={18} />
+                        </button>
                     </div>
-                    <Link
-                        href={`/test-cases/${tc.id}/edit`}
-                        className="shrink-0 p-1 border rounded-lg text-muted hover-text-primary" 
-                        aria-label={`Edit test case ${tc.testCaseId}`}>
-                            <Pencil size={16} />
-                    </Link>
-                    <button 
-                        className="shrink-0 p-1 border rounded-lg text-muted hover-text-danger disabled:cursor-not-allowed disabled:opacity-50" 
-                        aria-label={`Delete test case ${tc.testCaseId}`}
-                        disabled={deletingId === tc.id}
-                        onClick={() => handleDeleteClick(tc)}>
-                            <Trash2 size={18} />
-                    </button>
-                </div>
-            </li>
-            ))}
-        </ul>
+                </li>
+                ))}
+            </ul>
+        </div>
     )
 }
 

@@ -88,45 +88,47 @@ export default function RequirementsList() {
     }
 
     return (
-        <ul className="bg-white p-2 border border-stone-200 rounded-lg dark:border-stone-700 dark:bg-stone-900">
-            {requirements.map((req) => (
-                <li 
-                    key={req.id}
-                    className="border-b border-stone-200 dark:border-stone-700 last:border-b-0"
-                >
-                <div className="flex items-start justify-between gap-2 p-4">
-                    {/* Requirement title, priority badge, and description */}
-                    <div className="min-w-0 flex-1">
-                        <div className="mb-2 flex flex-wrap items-center gap-2">
-                            <h2 className="text-base font-semibold">
-                                {req.requirementId} -- {req.title}
-                            </h2>
-                            <span className={`rounded-full px-3 text-sm ${getPriorityClasses(req.priority)}`}
-                            >
-                                {req.priority ?? "Unassigned"}
-                            </span>
+        <div className="max-h-[600px] overflow-y-auto rounded-lg border border-stone-200 dark:border-stone-700">
+            <ul className="bg-white p-2 dark:bg-stone-900">
+                {requirements.map((req) => (
+                    <li 
+                        key={req.id}
+                        className="border-b border-stone-200 dark:border-stone-700 last:border-b-0"
+                    >
+                    <div className="flex items-start justify-between gap-2 p-4">
+                        {/* Requirement title, priority badge, and description */}
+                        <div className="min-w-0 flex-1">
+                            <div className="mb-2 flex flex-wrap items-center gap-2">
+                                <h2 className="text-base font-semibold">
+                                    {req.requirementId} -- {req.title}
+                                </h2>
+                                <span className={`rounded-full px-3 text-sm ${getPriorityClasses(req.priority)}`}
+                                >
+                                    {req.priority ?? "Unassigned"}
+                                </span>
+                            </div>
+                            <p className="max-w-2xl text-sm text-muted">
+                                {req.description}
+                            </p>
                         </div>
-                        <p className="max-w-2xl text-sm text-muted">
-                            {req.description}
-                        </p>
+                        <Link
+                            href={`/requirements/${req.id}/edit`}
+                            className="shrink-0 p-1 border rounded-lg text-muted hover-text-primary" 
+                            aria-label={`Edit requirement ${req.requirementId}`}>
+                                <Pencil size={16} />
+                        </Link>
+                        <button 
+                            className="shrink-0 p-1 border rounded-lg text-muted hover-text-danger disabled:cursor-not-allowed disabled:opacity-50" 
+                            aria-label={`Delete requirement ${req.requirementId}`}
+                            disabled={deletingId === req.id}
+                            onClick={() => handleDeleteClick(req)}>
+                                <Trash2 size={18} />
+                        </button>
                     </div>
-                    <Link
-                        href={`/requirements/${req.id}/edit`}
-                        className="shrink-0 p-1 border rounded-lg text-muted hover-text-primary" 
-                        aria-label={`Edit requirement ${req.requirementId}`}>
-                            <Pencil size={16} />
-                    </Link>
-                    <button 
-                        className="shrink-0 p-1 border rounded-lg text-muted hover-text-danger disabled:cursor-not-allowed disabled:opacity-50" 
-                        aria-label={`Delete requirement ${req.requirementId}`}
-                        disabled={deletingId === req.id}
-                        onClick={() => handleDeleteClick(req)}>
-                            <Trash2 size={18} />
-                    </button>
-                </div>
-            </li>
-            ))}
-        </ul>
+                </li>
+                ))}
+            </ul>
+        </div>
     )
 }
 
