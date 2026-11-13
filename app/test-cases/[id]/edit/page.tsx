@@ -1,7 +1,5 @@
 import EditTestCaseForm from "./EditTestCaseForm";
 
-import type { TestCase } from "../../types/testCase";
-
 type EditTestCasePageProps = {
     params: Promise<{
         id: string;

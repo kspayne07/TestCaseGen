@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import type { TestCase } from "./types/testCase";
-import { Trash2, Pencil } from "lucide-react";
+import { Eye, Trash2, Pencil } from "lucide-react";
 
 import Link from "next/link";
 
@@ -57,7 +57,7 @@ export default function TestCasesList() {
                 throw new Error("Failed to delete test case.");
             }
 
-            // Update requirements state
+            // Update list's state
             setTestCases((currentTestCases) =>
                 currentTestCases.filter(
                     (testCase) => testCase.id !== tc.id
@@ -103,7 +103,7 @@ export default function TestCasesList() {
                                 </h2>
 
                                 {/* Test Case status*/}
-                                <span className={`rounded-full px-3 text-sm ${getStatusClasses(tc.status)}`}
+                                <span className={`inline-flex items-center rounded-full px-3 text-sm ${getStatusClasses(tc.status)}`}
                                 >
                                     {tc.status ?? "Unassigned"}
                                 </span>
@@ -140,6 +140,14 @@ export default function TestCasesList() {
                                 )}
                             </div>
                         </div>
+
+                        {/* View Details button*/}
+                        <Link
+                            href={`/test-cases/${tc.id}`}
+                            className="shrink-0 p-1 border rounded-lg text-muted hover-text-primary" 
+                            aria-label={`View ${tc.testCaseId}'s details`}>
+                                <Eye size={16} />
+                        </Link>
                         
                         {/* Edit button*/}
                         <Link

@@ -26,6 +26,11 @@ body {
 }
 
 /* Reusable secondary text */
+.text-secondary {
+  @apply text-gray-100 dark:text-gray-900;
+} 
+
+/* Reusable muted text */
 .text-muted {
   @apply text-gray-600 dark:text-gray-300;
 } 
@@ -47,4 +52,9 @@ body {
 /* Resuable primary button class */
 .button-primary {
   @apply bg-blue-600 font-medium text-white hover:bg-blue-700 dark:bg-blue-800 dark:hover:bg-blue-700;
+}
+
+/* Resuable danger button class */
+.button-danger {
+  @apply bg-red-600 font-medium text-white hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800;
 }
