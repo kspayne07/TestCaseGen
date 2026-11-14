@@ -20,8 +20,8 @@ export default function TestCaseInformation({ testCase
             </h2>
 
 
-            { /* Preconditons and Pass Criteria */ }
-            <div className="grid grid-cols-2 gap-6">
+            { /* Preconditions and Pass Criteria */ }
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
                     <h3 className="font-semibold mb-2">
                         Preconditions
@@ -30,7 +30,7 @@ export default function TestCaseInformation({ testCase
                         {testCase.preconditions || "No preconditions specified."}
                     </p>
                 </div>
-                <div className="border-l border-stone-200 dark:border-stone-700 pl-6">
+                <div className="border-t border-stone-200 pt-6 dark:border-stone-700 sm:border-l sm:border-t-0 sm:pt-0 sm:pl-6">
                     <h3 className="font-semibold mb-2">
                         Pass Criteria
                     </h3>

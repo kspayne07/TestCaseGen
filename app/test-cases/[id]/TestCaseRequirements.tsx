@@ -12,6 +12,14 @@ export default function TestCaseRequirements({ testCase
 
     const associatedRequirements = testCase.requirements;
 
+    if (associatedRequirements.length == 0){
+        return (
+            <p className="text-muted">
+                No associated Requirements.
+            </p>
+        );
+    }
+
     return(
 
         <div className="border border-stone-200 rounded-lg bg-white p-6 shadow-sm dark:border-stone-700 dark:bg-stone-900">

@@ -8,7 +8,7 @@ type TestCaseStepsProps = {
     testCase: TestCase;
 };
 
-export default async function TestCaseTestSteps({ testCase 
+export default function TestCaseSteps({ testCase 
     } : TestCaseStepsProps
 ) {
 
@@ -21,7 +21,7 @@ export default async function TestCaseTestSteps({ testCase
                 Test Steps
             </h2>
 
-            <TestCaseStepsTable testCaseId={testCase.id} />
+            <TestCaseStepsTable testCase={testCase} />
 
         </div>
     );

@@ -3,7 +3,7 @@ import type { TestCase } from "../types/testCase";
 import DeleteTestCaseButton from "./DeleteTestCaseButton";
 
 import Link from "next/link";
-import { ArrowLeft, Pencil, ClipboardList } from "lucide-react"
+import { ArrowLeft, Pencil, ClipboardList } from "lucide-react";
 
 type TestCaseHeaderProps = {
     testCase: TestCase;
@@ -15,7 +15,7 @@ export default function TestCaseHeader({ testCase
 
     return(
         <div className="border border-stone-200 rounded-lg bg-white p-6 shadow-sm dark:border-stone-700 dark:bg-stone-900">
-            <div className="flex items-start justify-between gap-2 p-4">
+            <div className="flex items-start justify-between gap-2">
                 <div className="flex min-w-0 flex-1 items-start gap-4">
 
                     {/* Clipboard Icon */}
@@ -26,9 +26,9 @@ export default function TestCaseHeader({ testCase
                     {/* Test Case Information */}
                     <div className="min-w-0 flex-1">
                         {/* Title Section */}
-                        <h2 className="mb-2 text-3xl font-semibold">
-                            {testCase.testCaseId} -- {testCase.title}
-                        </h2>
+                        <h1 className="mb-2 text-3xl font-semibold">
+                            {testCase.testCaseId} — {testCase.title}
+                        </h1>
 
                         {/* Test Case status*/}
                         <span className={`inline-flex items-center rounded-full px-3 text-sm ${getStatusClasses(testCase.status)}`}
@@ -73,8 +73,8 @@ export default function TestCaseHeader({ testCase
     );
 }
 
-function getStatusClasses(priority: string | null) {
-    switch (priority) {
+function getStatusClasses(status: string | null) {
+    switch (status) {
         case "Draft":
             return "border bg-stone-100 text-stone-800 dark:bg-stone-600 dark:text-stone-200";
         case "Ready":

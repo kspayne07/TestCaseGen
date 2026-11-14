@@ -108,7 +108,12 @@ export async function GET(request: Request) {
                     include: {
                         requirement: true,
                     }
-                }
+                },
+                steps: {
+                    orderBy: {
+                        stepNumber: "asc",
+                    },
+                },
             }
         });
 

@@ -14,4 +14,10 @@ export type TestCase = {
             title: string;
         };
     }[];
+
+    steps: {
+        stepNumber: number;
+        instruction: string;
+        expectedResult: string | null;
+    }[];
 };
