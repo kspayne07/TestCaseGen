@@ -9,7 +9,7 @@ type TestCaseHeaderProps = {
     testCase: TestCase;
 };
 
-export default async function TestCaseHeader({ testCase 
+export default function TestCaseHeader({ testCase 
     } : TestCaseHeaderProps
 ) {
 

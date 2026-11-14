@@ -6,7 +6,7 @@ type TestCaseInformationProps = {
     testCase: TestCase;
 };
 
-export default async function TestCaseInformation({ testCase 
+export default function TestCaseInformation({ testCase 
     } : TestCaseInformationProps
 ) {
 

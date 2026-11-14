@@ -1,7 +1,7 @@
-import test from "node:test";
 import TestCaseHeader from "./TestCaseHeader";
 import TestCaseInformation from "./TestCaseInformation";
 import TestCaseRequirements from "./TestCaseRequirements";
+import TestCaseTestSteps from "./TestCaseSteps";
 
 type TestCaseDetailsPageProps = {
     params: Promise<{
@@ -36,6 +36,8 @@ export default async function TestCaseDetailsPage({
             <TestCaseInformation testCase={testCase} />
 
             <TestCaseRequirements testCase={testCase} />
+
+            <TestCaseTestSteps testCase={testCase} />
         </div>
     );
 }

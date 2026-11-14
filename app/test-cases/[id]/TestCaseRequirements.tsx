@@ -1,4 +1,3 @@
-import test from "node:test";
 import type { TestCase } from "../types/testCase";
 
 import { Link } from "lucide-react"
@@ -7,7 +6,7 @@ type TestCaseRequirementsProps = {
     testCase: TestCase;
 };
 
-export default async function TestCaseRequirements({ testCase 
+export default function TestCaseRequirements({ testCase 
     } : TestCaseRequirementsProps
 ) {
 
@@ -26,7 +25,7 @@ export default async function TestCaseRequirements({ testCase
             { /* Requirement Badges */}
             <div className="flex flex-wrap gap-2">
                 {associatedRequirements.map((req) => (
-                    <span className="border border-blue-300/50 inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/70">
+                    <span key={req.requirement.id} className="border border-blue-300/50 inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/70">
                         {req.requirement.requirementId} — {req.requirement.title}
                     </span>
                 ))}
