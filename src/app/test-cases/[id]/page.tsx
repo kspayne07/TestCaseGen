@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { getTestCaseById } from "@/src/lib/test-cases/getTestCaseById";
+import { getTestCaseById } from "@/lib/test-cases/getTestCaseById";
 
 import TestCaseHeader from "./TestCaseHeader";
 import TestCaseInformation from "./TestCaseInformation";

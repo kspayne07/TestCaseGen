@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/src/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 // Gets all test steps for a test case
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {

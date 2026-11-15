@@ -1,6 +1,6 @@
 import "server-only";
 
-import { prisma } from "@/src/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export async function getTestCaseById(id: number) {
     return await prisma.testCase.findUnique({

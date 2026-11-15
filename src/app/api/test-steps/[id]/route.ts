@@ -1,87 +1,85 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/src/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
-// Zod schema for Requirement Object
-const patchRequirementSchema = z.object({
-    title: z.string().optional(),
-    description: z.string().optional(),
-    priority: z.enum(["Low", "Medium", "High"]).optional(),
-    status: z.enum(["Draft", "In Progress", "Complete"]).optional()
+// Zod schema for Test Step Data
+const patchTestStepSchema = z.object({
+    instruction: z.string().optional(),
+    expectedResult: z.string().optional()
 });
 
-// Gets one requirement by id
+
+// Gets one test step by id
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
-
-        const requirement = await prisma.requirement.findUnique({
+        const testStep = await prisma.testStep.findUnique({
             where: {
                 id: Number(id)
             }
         });
 
-        if(!requirement) {
-                return NextResponse.json(
-                { error: "Requirement not found" },
+        if (!testStep) {
+            return NextResponse.json(
+                { error: "Test step not found" },
                 { status: 404 }
             );
         }
 
-        return NextResponse.json(requirement, { status: 200});
+        return NextResponse.json(testStep, { status: 200 });
     } catch (error) {
         console.error(error);
         
         return NextResponse.json(
-            { error: "Failed to fetch requirement" },
+            { error: "Failed to fetch test step" },
             { status: 500 }
         );
     }
 }
 
-// Deletes a requirement by id
+// Deletes a test step by id
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
-        const requirement = await prisma.requirement.delete({
+        const testStep = await prisma.testStep.delete({
             where: {
                 id: Number(id)
             }
         });
 
-        return NextResponse.json(requirement, { status: 200});
+        return NextResponse.json(testStep, { status: 200 });
     } catch (error) {
         console.error(error);
 
-        // If requirement with given id does not exist
+        // If test step with given id does not exist
         if (
             error instanceof Prisma.PrismaClientKnownRequestError &&
             error.code === "P2025"
         ) {
             return NextResponse.json(
-                { error: "Requirement not found" },
+                { error: "Test step not found" },
                 { status: 404 }
             );
         }
         
         return NextResponse.json(
-            { error: "Failed to delete requirement" },
+            { error: "Failed to delete test step" },
             { status: 500 }
         );
     }
 }
 
-// Update a Requirement
+// Update a Test Step
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
         const body = await request.json();
 
-        const result = patchRequirementSchema.safeParse(body);
+        const result = patchTestStepSchema.safeParse(body);
 
         // Zod validation 
         if (!result.success) {
@@ -94,32 +92,32 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
             });
         }
 
-        const requirementData = result.data
+        const testStepData = result.data
 
-        const requirement = await prisma.requirement.update({
-            data: requirementData,
+        const testStep = await prisma.testStep.update({
+            data: testStepData,
             where: {
                 id: Number(id)
             }
         });
 
-        return NextResponse.json(requirement, { status: 200});
+        return NextResponse.json(testStep, { status: 200});
     } catch (error) {
         console.error(error);
 
-        // If requirement with given id does not exist
+        // If test step with given id does not exist
         if (
             error instanceof Prisma.PrismaClientKnownRequestError &&
             error.code === "P2025"
         ) {
             return NextResponse.json(
-                { error: "Requirement not found" },
+                { error: "Test step not found" },
                 { status: 404 }
             );
         }
         
         return NextResponse.json(
-            { error: "Failed to update requirement" },
+            { error: "Failed to update test step" },
             { status: 500 }
         );
     }
