@@ -9,11 +9,6 @@ type TestCaseStepsTableProps = {
 export default function TestCaseStepsTable({ testCase 
     } : TestCaseStepsTableProps
 ) {
-
-    console.dir(testCase, { depth: null, colors: true });
-
-    const testSteps = testCase.steps;
-
     return(
         <table className="border rounded w-full text-left text-sm">
 
