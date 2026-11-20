@@ -1,13 +1,5 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
-import { z } from "zod";
-
-// Zod schema for Test Step Data
-const patchTestStepSchema = z.object({
-    instruction: z.string().optional(),
-    expectedResult: z.string().optional()
-});
 
 // Gets one test step by id
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {

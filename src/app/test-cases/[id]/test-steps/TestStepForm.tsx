@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { TestStep } from "@/app/test-steps/types/testStep";
 
 export type TestStepFormData = {
@@ -29,6 +29,12 @@ export default function TestStepForm({
 
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    /* Update fields when testStep is updated */
+    useEffect(() => {
+        setInstruction(testStep?.instruction ?? "");
+        setExpectedResult(testStep?.expectedResult ?? "");
+    }, [testStep]);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();

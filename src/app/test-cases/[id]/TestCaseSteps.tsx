@@ -87,6 +87,26 @@ export default function TestCaseSteps({ testCase
         handleClose();
     }
 
+    async function handleDelete(step: TestStep) {
+        const confirmed = window.confirm(
+            `Are you sure you want to delete step ${step.stepNumber}?`
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        const response = await fetch(`/api/test-cases/${testCase.id}/test-steps/${step.id}`, {
+            method: "DELETE",
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to delete test case.");
+        }
+
+        router.refresh();
+    }
+
     return(
         <div className="border border-stone-200 rounded-lg bg-white p-6 shadow-sm dark:border-stone-700 dark:bg-stone-900">
 
@@ -107,7 +127,11 @@ export default function TestCaseSteps({ testCase
                 </button>
             </div>
 
-            <TestCaseStepsTable testCase={testCase} />
+            <TestCaseStepsTable 
+                testCase={testCase}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+            />
 
             <TestStepModal
                 isOpen={isModalOpen}

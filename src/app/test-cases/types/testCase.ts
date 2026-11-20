@@ -1,3 +1,5 @@
+import type { TestStep } from "@/app/test-steps/types/testStep";
+
 export type TestCase = {
     id: number;
     testCaseId: string;
@@ -15,9 +17,5 @@ export type TestCase = {
         };
     }[];
 
-    steps: {
-        stepNumber: number;
-        instruction: string;
-        expectedResult: string | null;
-    }[];
+    steps: TestStep[];
 };
